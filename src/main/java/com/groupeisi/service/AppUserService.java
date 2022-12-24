@@ -24,22 +24,28 @@ public class AppUserService {
 	private IAppUserRepository appUserRepository;
 	private AppUserMapper appUserMapper;
 	private MessageSource messageSource;
-	
+
+	// Get All Users
 	@Transactional(readOnly = true)
 	public List<AppUser> getAppUsers() {
-		return StreamSupport.stream(appUserRepository.findAll().spliterator(), false)
+		int id = 0;
+		return StreamSupport.stream(Optional.ofNullable(appUserRepository.findAll()).orElseThrow(() ->
+								new EntityNotFoundException(messageSource.getMessage("appUser.notfound", new Object[]{id}, Locale.getDefault())))
+						.spliterator(), false)
 				.map(appUserMapper::toAppUser)
 				.collect(Collectors.toList());
 	}
-	
+
+	// Get One User By his ID
 	@Transactional(readOnly = true)
 	public AppUser getAppUser(Integer id) {
 		 return appUserMapper.toAppUser(appUserRepository.findById(id)
 				 .orElseThrow(() -> 
-				 new EntityNotFoundException(messageSource.getMessage("appUser.notfound", new Object[]{id},
+				 new EntityNotFoundException(messageSource.getMessage("appUserId.notfound", new Object[]{id},
 						 Locale.getDefault()))));
 	}
 
+	// Get One User By his Email
 	@Transactional(readOnly = true)
 	public AppUser getAppUserByEmail(String email) {
 		return appUserMapper.toAppUser(Optional.ofNullable(appUserRepository.findByEmail(email))
@@ -61,10 +67,34 @@ public class AppUserService {
 	@Transactional(readOnly = true)
 	public List<AppUser> getAppUserByFirstname(String firstname) {
 		return StreamSupport.stream(Optional.ofNullable(appUserRepository.findByPrenom(firstname)).orElseThrow(() ->
-								new EntityNotFoundException(messageSource.getMessage("appUserNom.notfound", new Object[]{firstname}, Locale.getDefault())))
+								new EntityNotFoundException(messageSource.getMessage("appUserPrenom.notfound", new Object[]{firstname}, Locale.getDefault())))
 						.spliterator(), false)
 				.map(appUserMapper::toAppUser)
 				.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public List<AppUser> getAppUserByPrenomAndNom(String firstname, String lastname) {
+		return StreamSupport.stream(Optional.ofNullable(appUserRepository.findByPrenomAndNom(firstname, lastname))
+				.orElseThrow(() -> new EntityNotFoundException(
+						messageSource.getMessage("appUserPrenomNom.notfound", new Object[]{firstname, lastname}, Locale.getDefault())
+					)
+				)
+				.spliterator(), false)
+				.map(appUserMapper::toAppUser)
+				.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public AppUser getAppUserByEmailAndPassword(String email, String password) {
+		return appUserMapper.toAppUser(Optional.ofNullable(appUserRepository.findByEmailAndPassword(email, password))
+			.orElseThrow(() ->
+				new EntityNotFoundException(messageSource.getMessage("appUserEmail.notfound", new Object[]{email},
+						Locale.getDefault()
+					)
+				)
+			)
+		);
 	}
 	
 	@Transactional

@@ -22,7 +22,7 @@ public class AppUserEntity {
     private String prenom;
     @Column(length = 200)
     private String adresse;
-    @Column(length = 150, nullable = false)
+    @Column(length = 150, nullable = false, unique = true)
     private String email;
     private String password;
     private int etat;
