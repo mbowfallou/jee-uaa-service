@@ -1,20 +1,20 @@
 package com.groupeisi.controller;
 
-import com.groupeisi.dto.AppRoles;
 import com.groupeisi.dto.AppUser;
 import com.groupeisi.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/users")
+@Controller
+@RequestMapping("/users")
 @AllArgsConstructor
-public class AppUserRestController {
+public class AppUserController {
     @Autowired
     private AppUserService appUserService;
 

@@ -22,8 +22,10 @@ public class AppUserEntity {
     private String prenom;
     @Column(length = 200)
     private String adresse;
-    @Column(length = 150, nullable = false, unique = true)
+    @Column(length = 150, unique = true)
     private String email;
+    @Column(length = 150, nullable = false, unique = true)
+    private String username;
     private String password;
     private int etat;
     @ManyToMany

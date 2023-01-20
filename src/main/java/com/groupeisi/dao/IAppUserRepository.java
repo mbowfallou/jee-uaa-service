@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IAppUserRepository extends JpaRepository<AppUserEntity, Integer> {
     AppUserEntity findByEmail(String email);
+    AppUserEntity findByUsername (String username);
     List<AppUserEntity> findByNom(String nom);
     List<AppUserEntity> findByPrenom(String prenom);
     List<AppUserEntity> findByPrenomAndNom(String prenom, String nom);
